@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# Copyright (C) 2020 The MoKee Open Source Project
+# Copyright (C) 2020 Paranoid Android
 #
 # SPDX-License-Identifier: Apache-2.0
 #
@@ -15,7 +15,7 @@ if [[ ! -d "${MY_DIR}" ]]; then MY_DIR="${PWD}"; fi
 
 MOKEE_ROOT="${MY_DIR}/../../.."
 
-HELPER="${MOKEE_ROOT}/vendor/mokee/build/tools/extract_utils.sh"
+HELPER="${MOKEE_ROOT}/vendor/pa/build/tools/extract_utils.sh"
 if [ ! -f "${HELPER}" ]; then
     echo "Unable to find helper script at ${HELPER}"
     exit 1
@@ -23,13 +23,13 @@ fi
 source "${HELPER}"
 
 # Initialize the helper
-setup_vendor "${DEVICE_COMMON}" "${VENDOR}" "${MOKEE_ROOT}" true
+setup_vendor "${DEVICE_COMMON}" "${VENDOR}" "${PA_ROOT}" true
 
 # Copyright headers and guards
 write_headers "m1882 m1892"
 
-write_makefiles "${MY_DIR}/proprietary-files.txt"
-write_makefiles "${MY_DIR}/proprietary-files-qc.txt"
+write_makefiles "${MY_DIR}/proprietary-files.txt" true
+write_makefiles "${MY_DIR}/proprietary-files-qc.txt" true
 
 # Finish
 write_footers
@@ -37,7 +37,7 @@ write_footers
 if [ -f "${MY_DIR}/../${DEVICE}/proprietary-files.txt" ]; then
     # Reinitialize the helper for device
     INITIAL_COPYRIGHT_YEAR="${DEVICE_BRINGUP_YEAR}"
-    setup_vendor "${DEVICE}" "${VENDOR}" "${MOKEE_ROOT}" false
+    setup_vendor "${DEVICE}" "${VENDOR}" "${PA_ROOT}" false
 
     # Copyright headers and guards
     write_headers

@@ -1,21 +1,19 @@
 #
-# Copyright (C) 2020 The MoKee Open Source Project
+# Copyright (C) 2020 Paranoid Android
 #
 # SPDX-License-Identifier: Apache-2.0
 #
 
+# Get non-open-source specific aspects
 $(call inherit-product, vendor/meizu/sdm845-common/sdm845-common-vendor.mk)
 
 # Overlays
-DEVICE_PACKAGE_OVERLAYS += $(LOCAL_PATH)/overlay-device
-PRODUCT_PACKAGE_OVERLAYS +=  $(LOCAL_PATH)/overlay-product
+DEVICE_PACKAGE_OVERLAYS += \
+    $(LOCAL_PATH)/overlay-device \
+    $(LOCAL_PATH)/overlay-sdm845
 
-DEVICE_PACKAGE_OVERLAYS += $(LOCAL_PATH)/overlay-sdm845
-
-DEVICE_PACKAGE_OVERLAYS += $(LOCAL_PATH)/overlay-mokee
-
-# Properties
--include $(LOCAL_PATH)/vendor_prop.mk
+PRODUCT_PACKAGE_OVERLAYS += \
+    $(LOCAL_PATH)/overlay-product
 
 # Permissions
 PRODUCT_COPY_FILES += \
@@ -48,16 +46,7 @@ PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.hardware.wifi.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.wifi.xml \
     frameworks/native/data/etc/android.software.midi.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.software.midi.xml \
     frameworks/native/data/etc/android.software.sip.voip.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.software.sip.voip.xml \
-    frameworks/native/data/etc/handheld_core_hardware.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/handheld_core_hardware.xml \
-    vendor/mokee/config/permissions/vendor.mokee.biometrics.fingerprint.inscreen.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/vendor.mokee.biometrics.fingerprint.inscreen.xml
-
-# Device uses high-density artwork where available
-PRODUCT_AAPT_CONFIG := normal
-PRODUCT_AAPT_PREF_CONFIG := xxhdpi
-
-# Boot animation
-TARGET_SCREEN_HEIGHT := 2160
-TARGET_SCREEN_WIDTH := 1080
+    frameworks/native/data/etc/handheld_core_hardware.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/handheld_core_hardware.xml
 
 # Haters gonna hate..
 PRODUCT_CHARACTERISTICS := nosdcard
@@ -130,8 +119,7 @@ PRODUCT_PACKAGES += \
 
 # Fingerprint
 PRODUCT_PACKAGES += \
-    android.hardware.biometrics.fingerprint@2.1 \
-    vendor.mokee.biometrics.fingerprint.inscreen@1.0-service.meizu_sdm845
+    android.hardware.biometrics.fingerprint@2.1
 
 # GPS
 PRODUCT_PACKAGES += \
@@ -188,11 +176,6 @@ PRODUCT_COPY_FILES += \
 PRODUCT_PACKAGES += \
     android.hardware.light@2.0-service.meizu_sdm845
 
-# LiveDisplay
-PRODUCT_PACKAGES += \
-    vendor.mokee.livedisplay@2.0-init.sh \
-    vendor.mokee.livedisplay@2.0-service.meizu_sdm845
-
 # Media
 PRODUCT_COPY_FILES += \
     $(call find-copy-subdir-files,*,$(LOCAL_PATH)/media,$(TARGET_COPY_OUT_VENDOR)/etc) \
@@ -218,6 +201,10 @@ PRODUCT_PACKAGES += \
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/configs/privapp-permissions-qti.xml:$(TARGET_COPY_OUT_SYSTEM)/etc/permissions/privapp-permissions-qti.xml \
     $(LOCAL_PATH)/configs/qti_whitelist.xml:$(TARGET_COPY_OUT_SYSTEM)/etc/sysconfig/qti_whitelist.xml
+
+# ParanoidDoze
+PRODUCT_PACKAGES += \
+    ParanoidDoze
 
 # Radio
 PRODUCT_PACKAGES += \
@@ -254,18 +241,11 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
     telephony-ext
 
-PRODUCT_BOOT_JARS += \
-    telephony-ext
-
 # Thermal
 PRODUCT_PACKAGES += \
     android.hardware.thermal@1.0-impl \
     android.hardware.thermal@1.0-service \
     thermal.sdm845
-
-# Touch
-PRODUCT_PACKAGES += \
-    vendor.mokee.touch@1.0-service.meizu_sdm845
 
 # USB
 PRODUCT_PACKAGES += \
